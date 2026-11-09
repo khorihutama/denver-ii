@@ -124,9 +124,16 @@ function itemRow(item) {
     b.textContent = t(key);
     b.className = "res-btn res-" + code + (answers[item.n] === code ? " selected" : "");
     b.onclick = () => {
-      answers[item.n] = answers[item.n] === code ? undefined : code;
-      if (!answers[item.n]) delete answers[item.n];
-      renderChecklist(); renderChart();
+      // Tapping the already-selected option again clears it (reset this item).
+      if (answers[item.n] === code) delete answers[item.n];
+      else answers[item.n] = code;
+      // Update only this row in place. A full renderChecklist() rebuilds the
+      // whole list and makes the page jump / scroll back up on every tap.
+      // The chart is re-rendered on demand when its panel is opened.
+      [...btns.children].forEach((x, i) =>
+        x.classList.toggle("selected", answers[item.n] === RESULT_BTNS[i][0])
+      );
+      renderResult();
     };
     btns.appendChild(b);
   }
