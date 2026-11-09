@@ -169,8 +169,70 @@ function renderResult() {
     <span>${t("delays")}: ${s.delays} • ${t("cautions")}: ${s.cautions}</span><p>${why}</p>`;
 }
 
-// ---- Chart view (implemented in renderChart below) ----
-function renderChart() { /* replaced by chart-view commit */ }
+// ---- Chart view ----
+// Classic Denver II layout, simplified: one row per item, x-axis 0–72 months.
+// Bar spans p25→p90, the p75→p90 segment is darker (the "caution" zone),
+// a vertical red line marks the child's (corrected) age.
+const MAX_MONTHS = 72;
+const pct = (m) => (m / MAX_MONTHS) * 100;
+
+function renderChart() {
+  const wrap = $("chart");
+  wrap.innerHTML = "";
+  if (currentAgeMonths === null) {
+    wrap.innerHTML = `<p class="hint">${t("needDob")}</p>`;
+    return;
+  }
+  for (const sector of SECTORS) {
+    const title = document.createElement("h4");
+    title.className = "sector-head";
+    title.textContent = sectorName(sector.id);
+    wrap.appendChild(title);
+
+    const scroll = document.createElement("div");
+    scroll.className = "chart-scroll";
+    const inner = document.createElement("div");
+    inner.className = "chart-inner";
+
+    // month axis
+    const axis = document.createElement("div");
+    axis.className = "chart-axis";
+    for (let m = 0; m <= MAX_MONTHS; m += 6) {
+      const tick = document.createElement("span");
+      tick.style.left = pct(m) + "%";
+      tick.textContent = m;
+      axis.appendChild(tick);
+    }
+    inner.appendChild(axis);
+
+    for (const item of ITEMS.filter((i) => i.sector === sector.id)) {
+      const row = document.createElement("div");
+      row.className = "chart-row";
+      const name = document.createElement("div");
+      name.className = "chart-name";
+      name.textContent = itemName(item);
+      const track = document.createElement("div");
+      track.className = "chart-track";
+      const bar = document.createElement("div");
+      bar.className = "chart-bar" + (answers[item.n] === "F" ? " bar-fail" : answers[item.n] === "P" ? " bar-pass" : "");
+      bar.style.left = pct(item.p25) + "%";
+      bar.style.width = pct(item.p90 - item.p25) + "%";
+      const tail = document.createElement("div");
+      tail.className = "chart-bar-tail";
+      tail.style.left = ((item.p75 - item.p25) / (item.p90 - item.p25)) * 100 + "%";
+      tail.style.width = ((item.p90 - item.p75) / (item.p90 - item.p25)) * 100 + "%";
+      bar.appendChild(tail);
+      const ageLine = document.createElement("div");
+      ageLine.className = "chart-age-line";
+      ageLine.style.left = pct(currentAgeMonths) + "%";
+      track.append(bar, ageLine);
+      row.append(name, track);
+      inner.appendChild(row);
+    }
+    scroll.appendChild(inner);
+    wrap.appendChild(scroll);
+  }
+}
 
 // ---- History (localStorage) ----
 const LS_KEY = "denver2-screenings";
