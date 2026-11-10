@@ -9,7 +9,7 @@ const $ = (id) => document.getElementById(id);
 const t = (k) => (I18N[lang] && I18N[lang][k]) || I18N.en[k] || k;
 const sectorName = (s) => {
   const sec = SECTORS.find((x) => x.id === s);
-  return lang === "id" ? sec.id : sec.en;
+  return lang === "id" ? sec.idn : sec.en;
 };
 const itemName = (item) => (lang === "id" ? item.id : item.en);
 

@@ -6,10 +6,10 @@
 // any clinical use. This app is a screening aid, not a diagnostic tool.
 
 const SECTORS = [
-  { id: "personal-social", en: "Personal–Social", id: "Personal–Sosial" },
-  { id: "fine-motor",      en: "Fine Motor–Adaptive", id: "Motorik Halus–Adaptif" },
-  { id: "language",        en: "Language", id: "Bahasa" },
-  { id: "gross-motor",     en: "Gross Motor", id: "Motorik Kasar" },
+  { id: "personal-social", en: "Personal–Social", idn: "Personal–Sosial" },
+  { id: "fine-motor",      en: "Fine Motor–Adaptive", idn: "Motorik Halus–Adaptif" },
+  { id: "language",        en: "Language", idn: "Bahasa" },
+  { id: "gross-motor",     en: "Gross Motor", idn: "Motorik Kasar" },
 ];
 
 // [sector, en, id, p25, p50, p75, p90]
