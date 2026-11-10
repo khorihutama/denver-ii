@@ -1,134 +1,18 @@
-// Denver II — simplified dataset
-// Ages are in MONTHS: [p25, p50, p75, p90] = age by which that % of children
-// in the Denver II normative sample passed the item.
-// NOTE: These are a simplified approximation of the published norms, kept
-// editable on purpose. Verify against the official Denver II form before
-// any clinical use. This app is a screening aid, not a diagnostic tool.
+// Denver II — dataset (Space version): 108 items, ages in months [p25,p50,p75,p90]
 
-const SECTORS = [
-  { id: "personal-social", en: "Personal–Social", idn: "Personal–Sosial" },
-  { id: "fine-motor",      en: "Fine Motor–Adaptive", idn: "Motorik Halus–Adaptif" },
-  { id: "language",        en: "Language", idn: "Bahasa" },
-  { id: "gross-motor",     en: "Gross Motor", idn: "Motorik Kasar" },
+"use strict";
+/* ============ DATA: [sector, en, id, p25, p50, p75, p90] ages in months ============ */
+var RAW=[
+["GM","Equal movements","Gerakan simetris",0.3,0.7,1.1,1.6],["GM","Lift head","Angkat kepala",0.5,0.9,1.4,2.0],["GM","Head up 45°","Kepala tegak 45°",1.2,1.8,2.5,3.2],["GM","Head up 90°","Kepala tegak 90°",2.0,2.8,3.6,4.4],["GM","Sit — head steady","Duduk — kepala tegak stabil",1.8,2.6,3.4,4.2],["GM","Bear weight on legs","Menumpu berat pada kaki",2.5,3.8,5.0,6.2],["GM","Chest up — arm support","Dada terangkat bertumpu lengan",3.0,4.2,5.2,6.5],["GM","Roll over","Berguling",3.2,4.5,5.6,6.8],["GM","Pull to sit — no head lag","Ditarik duduk — tanpa head lag",3.5,4.8,6.0,7.2],["GM","Sit without support","Duduk tanpa bantuan",5.0,6.2,7.5,8.8],["GM","Stand holding on","Berdiri berpegangan",6.5,8.0,9.5,11.0],["GM","Get to sitting","Berusaha duduk sendiri",7.0,8.8,10.5,12.0],["GM","Pull to stand","Berdiri dari posisi duduk",7.5,9.2,10.8,12.5],["GM","Stand momentarily","Berdiri sesaat",9.0,10.8,12.5,14.0],["GM","Stand alone well","Berdiri sendiri dengan baik",10.0,12.0,14.0,16.0],["GM","Stoop and recover","Jongkok dan berdiri lagi",11.0,13.0,15.5,18.0],["GM","Walk well","Berjalan dengan baik",11.5,13.5,15.5,17.5],["GM","Walk backwards","Berjalan mundur",13.0,15.5,18.0,20.5],["GM","Run","Berlari",16.0,19.0,22.0,25.0],["GM","Walk up steps","Naik tangga",17.0,20.0,23.5,27.0],["GM","Kick ball forward","Menendang bola ke depan",18.0,21.0,24.0,27.0],["GM","Throw ball overhand","Melempar bola dari atas",22.0,27.0,32.0,38.0],["GM","Jump up","Melompat ke atas",21.0,24.0,27.0,30.0],["GM","Balance each foot — 1 sec","Seimbang satu kaki — 1 detik",30.0,36.0,42.0,48.0],["GM","Balance each foot — 3 sec","Seimbang satu kaki — 3 detik",38.0,46.0,54.0,62.0],["GM","Hop on one foot","Melompat dengan satu kaki",42.0,50.0,58.0,66.0],["GM","Balance each foot — 6 sec","Seimbang satu kaki — 6 detik",48.0,56.0,64.0,72.0],
+["FM","Follows to midline","Mengikuti benda sampai garis tengah",0.5,0.9,1.3,1.8],["FM","Follows past midline","Mengikuti benda melewati garis tengah",1.2,1.8,2.4,3.0],["FM","Grasp rattle","Menggenggam kerincingan",2.0,2.8,3.6,4.4],["FM","Hands together","Kedua tangan bertemu",2.2,3.0,3.9,4.8],["FM","Follows 180°","Mengikuti benda 180°",2.5,3.5,4.5,5.5],["FM","Regards raisin","Memperhatikan kismis / benda kecil",3.0,4.2,5.4,6.6],["FM","Reaches for object","Meraih benda",3.5,4.6,5.8,7.0],["FM","Rake raisin","Menggaruk / mengambil kismis",4.5,6.0,7.5,9.0],["FM","Pass cube hand to hand","Memindahkan kubus antar tangan",5.5,7.0,8.5,10.0],["FM","Take 2 cubes","Mengambil 2 kubus",6.0,7.5,9.0,10.5],["FM","Thumb–finger grasp","Menjepit dengan ibu jari–jari",7.0,8.5,10.0,11.5],["FM","Bang 2 cubes together","Membenturkan 2 kubus",7.5,9.5,11.5,13.5],["FM","Put cube in cup","Memasukkan kubus ke cangkir",10.0,12.5,15.0,17.5],["FM","Dump raisin (demonstrated)","Menuang kismis (dicontohkan)",12.0,15.0,18.0,21.0],["FM","Scribbles","Mencoret-coret",11.0,14.0,17.0,20.0],["FM","Tower of 2 cubes","Menara 2 kubus",13.0,16.0,19.0,22.0],["FM","Tower of 4 cubes","Menara 4 kubus",17.0,20.5,24.0,28.0],["FM","Tower of 6 cubes","Menara 6 kubus",19.0,23.0,27.0,31.0],["FM","Imitate vertical line","Meniru garis vertikal",24.0,29.0,34.0,39.0],["FM","Tower of 8 cubes","Menara 8 kubus",26.0,31.0,36.0,41.0],["FM","Thumb wiggle","Menggerakkan ibu jari",30.0,37.0,44.0,51.0],["FM","Copy circle","Meniru lingkaran",33.0,39.0,45.0,51.0],["FM","Copy cross (+)","Meniru tanda tambah (+)",36.0,43.0,50.0,57.0],["FM","Pick the longer line","Memilih garis yang lebih panjang",38.0,45.0,52.0,59.0],["FM","Draw person — 3 parts","Menggambar orang — 3 bagian",40.0,48.0,56.0,64.0],["FM","Copy square (demonstrated)","Meniru persegi (dicontohkan)",44.0,52.0,60.0,68.0],["FM","Draw person — 6 parts","Menggambar orang — 6 bagian",48.0,56.0,64.0,72.0],
+["LANG","Responds to bell","Bereaksi terhadap bunyi bel",0.3,0.7,1.1,1.5],["LANG","Vocalizes","Bersuara (selain menangis)",0.5,1.0,1.6,2.2],["LANG","Laughs","Tertawa",1.5,2.2,3.0,3.8],["LANG","Squeals","Memekik gembira",2.0,3.0,4.0,5.0],["LANG","Turns to rattling sound","Menoleh ke bunyi kerincingan",3.0,4.2,5.4,6.6],["LANG","Turns to voice","Menoleh ke arah suara",3.5,4.8,6.0,7.2],["LANG","Single syllables","Suku kata tunggal (ba, da)",4.0,5.5,7.0,8.5],["LANG","Imitates speech sounds","Meniru bunyi bicara",5.5,7.5,9.5,11.5],["LANG","Dada/Mama — nonspecific","Papa/Mama — belum spesifik",6.5,8.5,10.5,12.5],["LANG","Jargon","Berbicara seperti bahasa sendiri",11.0,14.0,17.0,20.0],["LANG","Dada/Mama — specific","Papa/Mama — spesifik",9.0,11.5,14.0,16.5],["LANG","One word","Satu kata",10.0,13.0,16.0,19.0],["LANG","2 words","2 kata",13.0,16.5,20.0,24.0],["LANG","3 words","3 kata",15.0,19.0,23.0,27.0],["LANG","6 words","6 kata",17.0,21.5,26.0,30.0],["LANG","Points to 2 pictures","Menunjuk 2 gambar",18.0,22.0,26.0,30.0],["LANG","Combine words","Menggabungkan 2 kata",19.0,23.5,28.0,32.0],["LANG","Name 1 picture","Menyebut 1 gambar",20.0,25.0,30.0,35.0],["LANG","Knows 6 body parts","Mengenal 6 bagian tubuh",19.0,24.0,29.0,34.0],["LANG","Points to 4 pictures","Menunjuk 4 gambar",22.0,27.0,32.0,37.0],["LANG","Speech half understandable","Bicara separuh dapat dimengerti",22.0,28.0,34.0,40.0],["LANG","Name 4 pictures","Menyebut 4 gambar",26.0,32.0,38.0,44.0],["LANG","Knows 2 adjectives","Mengenal 2 kata sifat",28.0,35.0,42.0,49.0],["LANG","Name 1 color","Menyebut 1 warna",30.0,38.0,46.0,54.0],["LANG","Count 1 block","Menghitung 1 kubus",32.0,40.0,48.0,56.0],["LANG","Speech all understandable","Bicara seluruhnya dapat dimengerti",36.0,44.0,52.0,60.0],["LANG","Name 4 colors","Menyebut 4 warna",38.0,46.0,54.0,62.0],["LANG","Understands 4 prepositions","Mengerti 4 kata depan",40.0,48.0,56.0,64.0],["LANG","Opposite analogies — 2","Lawan kata — 2 benar",44.0,52.0,60.0,68.0],["LANG","Define 5 words","Mendefinisikan 5 kata",48.0,56.0,64.0,72.0],
+["PS","Regards face","Memandang wajah",0.3,0.6,1.0,1.4],["PS","Smiles responsively","Senyum sebagai respons",0.5,0.9,1.4,1.9],["PS","Smiles spontaneously","Senyum spontan",1.0,1.6,2.3,3.0],["PS","Regards own hand","Memperhatikan tangannya sendiri",1.8,2.6,3.5,4.4],["PS","Works for toy","Berusaha meraih mainan",4.5,6.0,7.5,9.0],["PS","Feeds self (cracker)","Makan sendiri (biskuit)",5.0,6.5,8.0,9.5],["PS","Plays pat-a-cake","Bermain tepuk tangan",7.0,9.0,11.0,13.0],["PS","Indicates wants","Menunjukkan keinginan",7.5,9.5,11.5,13.5],["PS","Waves bye-bye","Melambai dadah",8.0,10.5,13.0,15.5],["PS","Plays ball with examiner","Bermain bola dengan pemeriksa",9.0,11.5,14.0,16.5],["PS","Drinks from cup","Minum dari cangkir",10.0,12.5,15.0,17.5],["PS","Imitates activities","Meniru kegiatan",11.0,14.0,17.0,20.0],["PS","Uses spoon / fork","Memakai sendok / garpu",13.0,16.0,19.0,22.0],["PS","Helps in house","Membantu pekerjaan rumah sederhana",14.0,17.5,21.0,24.5],["PS","Removes garment","Melepas pakaian",15.0,19.0,23.0,27.0],["PS","Brushes teeth with help","Gosok gigi dengan bantuan",20.0,25.0,30.0,35.0],["PS","Puts on clothing","Memakai pakaian",24.0,30.0,36.0,42.0],["PS","Washes and dries hands","Cuci dan keringkan tangan",26.0,32.0,38.0,44.0],["PS","Names a friend","Menyebut nama teman",28.0,34.0,40.0,46.0],["PS","Wears T-shirt","Memakai kaos sendiri",30.0,37.0,44.0,51.0],["PS","Plays board / card games","Bermain permainan papan / kartu",36.0,43.0,50.0,57.0],["PS","Dresses without supervision","Berpakaian tanpa pengawasan",36.0,44.0,52.0,60.0],["PS","Brushes teeth — no help","Gosok gigi tanpa bantuan",38.0,46.0,54.0,62.0],["PS","Prepares cereal","Menyiapkan sereal sendiri",44.0,52.0,60.0,68.0]
 ];
+var ITEMS=RAW.map(function(r,i){return{id:i,sector:r[0],name_en:r[1],name_id:r[2],p25:r[3],p50:r[4],p75:r[5],p90:r[6]};});
 
-// [sector, en, id, p25, p50, p75, p90]
-const ITEM_ROWS = [
-  // ---- Personal–Social ----
-  ["personal-social","Regards face","Menatap wajah",0.2,0.6,1.0,1.5],
-  ["personal-social","Smiles responsively","Tersenyum sebagai respons",0.6,1.1,1.6,2.2],
-  ["personal-social","Smiles spontaneously","Tersenyum spontan",1.0,1.7,2.4,3.2],
-  ["personal-social","Regards own hand","Memperhatikan tangannya sendiri",1.8,2.7,3.6,4.5],
-  ["personal-social","Works for toy","Berusaha meraih mainan",3.5,4.9,6.0,7.0],
-  ["personal-social","Feeds self (cracker)","Makan sendiri (biskuit)",5.2,6.2,7.3,8.5],
-  ["personal-social","Plays pat-a-cake","Bermain tepuk tangan (pat-a-cake)",6.5,8.0,9.5,11.0],
-  ["personal-social","Indicates wants","Menunjukkan keinginan tanpa menangis",7.5,9.5,11.5,13.5],
-  ["personal-social","Waves bye-bye","Melambaikan tangan (dadah)",7.8,9.8,11.8,14.0],
-  ["personal-social","Plays ball with examiner","Bermain bola dengan pemeriksa",9.0,11.5,14.0,16.5],
-  ["personal-social","Drinks from cup","Minum dari gelas/cangkir",9.5,12.0,14.5,16.5],
-  ["personal-social","Helps in house (simple tasks)","Membantu pekerjaan rumah sederhana",11.0,14.0,17.0,20.0],
-  ["personal-social","Uses spoon/fork","Menggunakan sendok/garpu",12.0,15.5,19.0,22.0],
-  ["personal-social","Removes garment","Melepas pakaian sendiri",13.5,17.0,20.5,24.0],
-  ["personal-social","Feeds a doll","Menyuapi boneka",14.0,18.0,22.0,26.0],
-  ["personal-social","Dresses with supervision","Berpakaian dengan pengawasan",19.0,24.0,30.0,36.0],
-  ["personal-social","Brushes teeth with help","Menggosok gigi dengan bantuan",20.0,26.0,33.0,40.0],
-  ["personal-social","Washes and dries hands","Mencuci dan mengeringkan tangan",24.0,31.0,38.0,44.0],
-  ["personal-social","Names a friend","Menyebut nama teman",27.0,34.0,41.0,47.0],
-  ["personal-social","Wears T-shirt","Memakai kaos sendiri",27.0,35.0,42.0,48.0],
-  ["personal-social","Dresses without supervision","Berpakaian tanpa pengawasan",33.0,40.0,46.0,52.0],
-  ["personal-social","Brushes teeth without help","Menggosok gigi tanpa bantuan",38.0,45.0,52.0,58.0],
-  ["personal-social","Plays board/card games","Bermain permainan papan/kartu",40.0,48.0,56.0,63.0],
-  ["personal-social","Prepares cereal","Menyiapkan sereal sendiri",44.0,52.0,60.0,67.0],
-
-  // ---- Fine Motor–Adaptive ----
-  ["fine-motor","Follows to midline","Mengikuti gerakan sampai garis tengah",0.5,1.0,1.6,2.3],
-  ["fine-motor","Follows past midline","Mengikuti gerakan melewati garis tengah",1.2,1.9,2.6,3.4],
-  ["fine-motor","Grasps rattle","Menggenggam mainan kerincingan",1.8,2.6,3.3,4.0],
-  ["fine-motor","Follows 180°","Mengikuti gerakan 180°",2.2,3.2,4.2,5.2],
-  ["fine-motor","Regards raisin (small object)","Memperhatikan benda kecil (kismis)",2.8,3.7,4.7,5.9],
-  ["fine-motor","Reaches for object","Menjangkau benda",3.2,4.2,5.2,6.1],
-  ["fine-motor","Looks for fallen yarn/object","Mencari benda yang jatuh",4.5,5.7,6.9,8.1],
-  ["fine-motor","Rakes raisin","Meraih benda kecil dengan gerakan menggaruk",4.8,6.0,7.2,8.4],
-  ["fine-motor","Passes cube hand to hand","Memindahkan kubus dari tangan ke tangan",4.5,5.9,7.2,8.5],
-  ["fine-motor","Takes 2 cubes","Mengambil 2 kubus",5.5,7.0,8.8,10.5],
-  ["fine-motor","Thumb–finger grasp","Menjimpit dengan ibu jari dan jari",7.0,8.8,10.5,12.5],
-  ["fine-motor","Bangs 2 cubes together","Membenturkan 2 kubus",7.5,9.5,12.0,14.5],
-  ["fine-motor","Tower of 2 cubes","Menara 2 kubus",11.0,14.0,17.5,20.5],
-  ["fine-motor","Scribbles","Mencoret-coret",11.5,14.5,18.0,21.0],
-  ["fine-motor","Tower of 4 cubes","Menara 4 kubus",14.5,18.0,22.0,26.0],
-  ["fine-motor","Dumps raisin from bottle (imitated)","Mengeluarkan benda kecil dari botol (meniru)",14.0,18.5,23.0,27.0],
-  ["fine-motor","Tower of 6 cubes","Menara 6 kubus",16.5,20.0,24.5,29.0],
-  ["fine-motor","Copies vertical line / imitates","Meniru garis vertikal",19.0,24.0,30.0,36.0],
-  ["fine-motor","Tower of 8 cubes","Menara 8 kubus",21.0,26.0,32.0,38.0],
-  ["fine-motor","Thumb wiggle (imitated)","Menggerakkan ibu jari (meniru)",24.0,31.0,38.0,44.0],
-  ["fine-motor","Copies circle","Meniru gambar lingkaran",27.0,34.0,41.0,47.0],
-  ["fine-motor","Draws person — 3 parts","Menggambar orang — 3 bagian",32.0,39.0,46.0,52.0],
-  ["fine-motor","Copies + (cross)","Meniru tanda +",32.0,40.0,47.0,53.0],
-  ["fine-motor","Picks longer line","Memilih garis yang lebih panjang",33.0,41.0,48.0,54.0],
-  ["fine-motor","Copies square (demonstrated)","Meniru persegi (setelah dicontohkan)",38.0,46.0,53.0,59.0],
-  ["fine-motor","Draws person — 6 parts","Menggambar orang — 6 bagian",42.0,49.0,56.0,62.0],
-  ["fine-motor","Copies square","Meniru persegi",44.0,52.0,59.0,66.0],
-
-  // ---- Language ----
-  ["language","Responds to bell","Berespons terhadap bunyi bel/lonceng",0.3,0.8,1.4,2.2],
-  ["language","Vocalises (not crying)","Bersuara (bukan menangis)",0.4,1.0,1.8,2.8],
-  ["language","Laughs","Tertawa",1.2,2.0,2.8,3.6],
-  ["language","Squeals","Memekik gembira",1.5,2.4,3.4,4.4],
-  ["language","Turns toward rattle sound","Menoleh ke arah bunyi kerincingan",2.8,4.2,5.6,7.0],
-  ["language","Turns toward voice","Menoleh ke arah suara",3.4,4.9,6.4,7.8],
-  ["language","Single syllables","Mengucapkan suku kata tunggal (ba, da)",3.8,5.2,6.6,7.9],
-  ["language","Double syllables","Mengucapkan suku kata ganda (baba, dada)",5.0,6.8,8.6,10.5],
-  ["language","Imitates speech sounds","Meniru bunyi bicara",5.5,7.5,9.5,11.5],
-  ["language","Jabbers","Mengoceh dengan intonasi seperti bicara",6.0,8.2,10.5,13.0],
-  ["language","Dada/Mama — non-specific","Dada/Mama — belum spesifik",6.5,8.8,11.0,13.5],
-  ["language","Dada/Mama — specific","Dada/Mama — spesifik (untuk ayah/ibu)",8.5,11.0,14.0,17.0],
-  ["language","One word (other than mama/dada)","Satu kata (selain mama/dada)",9.5,12.5,15.5,18.5],
-  ["language","Two words","Dua kata",12.0,15.5,19.0,22.5],
-  ["language","Three words","Tiga kata",14.0,18.0,22.0,26.0],
-  ["language","Points to 1 picture","Menunjuk 1 gambar yang disebut",15.0,19.5,24.0,28.0],
-  ["language","Combines words","Menggabungkan 2 kata",15.5,20.0,25.0,30.0],
-  ["language","Names 1 picture","Menyebut nama 1 gambar",17.0,22.0,27.0,32.0],
-  ["language","Knows 2 body parts","Menunjuk 2 bagian tubuh",16.0,21.0,26.0,31.0],
-  ["language","Speech half understandable","Separuh bicaranya dapat dimengerti",18.0,24.0,31.0,38.0],
-  ["language","Names 4 pictures","Menyebut nama 4 gambar",22.0,29.0,36.0,43.0],
-  ["language","Knows 2 actions (e.g. run, eat)","Mengerti 2 kata kerja (mis. lari, makan)",24.0,31.0,38.0,45.0],
-  ["language","Understands 2 prepositions","Mengerti 2 kata depan (di atas, di bawah)",28.0,35.0,42.0,49.0],
-  ["language","Speech all understandable","Seluruh bicaranya dapat dimengerti",29.0,37.0,45.0,52.0],
-  ["language","Understands cold / tired / hungry","Mengerti konsep dingin / lelah / lapar",36.0,44.0,52.0,59.0],
-  ["language","Knows 2 adjectives (e.g. big, cold)","Mengerti 2 kata sifat (mis. besar, dingin)",38.0,46.0,54.0,61.0],
-  ["language","Counts 1 block","Menghitung 1 kubus",38.0,47.0,55.0,63.0],
-  ["language","Defines / opposites (analogy)","Mengerti lawan kata (panas lawan dingin)",46.0,55.0,63.0,69.0],
-
-  // ---- Gross Motor ----
-  ["gross-motor","Equal movements (arms & legs)","Gerakan simetris (tangan & kaki)",0.2,0.6,1.1,1.8],
-  ["gross-motor","Lifts head 45° (prone)","Mengangkat kepala 45° (tengkurap)",0.8,1.5,2.3,3.2],
-  ["gross-motor","Lifts head 90° (prone)","Mengangkat kepala 90° (tengkurap)",1.6,2.4,3.3,4.3],
-  ["gross-motor","Chest up, arm support (prone)","Dada terangkat bertumpu lengan (tengkurap)",2.2,3.3,4.4,5.5],
-  ["gross-motor","Rolls over","Berguling",2.8,4.0,5.2,6.4],
-  ["gross-motor","Bears weight on legs","Menahan berat badan pada kaki",2.5,4.0,5.8,7.5],
-  ["gross-motor","Sits without support","Duduk tanpa bantuan",4.8,6.0,7.2,8.4],
-  ["gross-motor","Stands holding on","Berdiri berpegangan",5.5,7.2,8.9,10.6],
-  ["gross-motor","Gets to sitting","Berusaha duduk sendiri",6.5,8.2,10.0,11.8],
-  ["gross-motor","Pulls to stand","Menarik badan untuk berdiri",6.8,8.6,10.4,12.2],
-  ["gross-motor","Stands 2 seconds","Berdiri 2 detik",8.0,10.0,12.0,14.0],
-  ["gross-motor","Stands alone well","Berdiri sendiri dengan baik",9.0,11.2,13.5,15.8],
-  ["gross-motor","Stoops and recovers","Membungkuk lalu tegak kembali",9.5,12.0,14.5,17.0],
-  ["gross-motor","Walks well","Berjalan dengan baik",10.0,12.3,14.8,17.3],
-  ["gross-motor","Walks backwards","Berjalan mundur",12.0,15.0,18.5,22.0],
-  ["gross-motor","Runs","Berlari",13.5,17.0,21.0,25.0],
-  ["gross-motor","Walks up steps","Naik tangga",14.0,18.0,22.5,27.0],
-  ["gross-motor","Kicks ball forward","Menendang bola ke depan",15.0,19.0,23.5,28.0],
-  ["gross-motor","Jumps up","Melompat ke atas",17.0,21.5,26.0,30.5],
-  ["gross-motor","Throws ball overhand","Melempar bola dari atas kepala",18.0,23.0,28.0,33.0],
-  ["gross-motor","Balances 1 second (each foot)","Berdiri 1 kaki selama 1 detik",20.0,26.0,32.0,38.0],
-  ["gross-motor","Balances 2 seconds","Berdiri 1 kaki selama 2 detik",24.0,30.0,36.0,42.0],
-  ["gross-motor","Hops on 1 foot","Melompat dengan 1 kaki",27.0,34.0,41.0,48.0],
-  ["gross-motor","Balances 3–4 seconds","Berdiri 1 kaki selama 3–4 detik",29.0,36.0,43.0,50.0],
-  ["gross-motor","Heel-to-toe walk","Berjalan tumit ke ujung kaki (garis lurus)",36.0,44.0,51.0,58.0],
-  ["gross-motor","Balances 5–6 seconds","Berdiri 1 kaki selama 5–6 detik",38.0,46.0,54.0,61.0],
-];
-
-const ITEMS = ITEM_ROWS.map((r, i) => ({
-  n: i + 1, sector: r[0], en: r[1], id: r[2],
-  p25: r[3], p50: r[4], p75: r[5], p90: r[6],
-}));
+var SECTORS={
+ GM:{en:"Gross Motor",id:"Motorik Kasar",color:"var(--gm)"},
+ FM:{en:"Fine Motor–Adaptive",id:"Motorik Halus–Adaptif",color:"var(--fm)"},
+ LANG:{en:"Language",id:"Bahasa",color:"var(--lang)"},
+ PS:{en:"Personal–Social",id:"Personal–Sosial",color:"var(--ps)"}
+};

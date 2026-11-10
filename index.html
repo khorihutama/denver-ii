@@ -1,96 +1,97 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="Denver II developmental screening tool for children 0–6 years. Simplified checklist and chart view, bilingual EN/ID.">
-<meta name="theme-color" content="#2563eb">
-<title>Denver II — Child Development Screening</title>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+<meta name="color-scheme" content="light dark"/>
+<link rel="icon" href="data:,"/>
+<title>Denver II Screening</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-<header class="app-header">
-  <div class="header-row">
-    <h1>Denver II</h1>
+<div class="wrap">
+
+  <div class="topbar">
     <div class="lang-toggle" role="group" aria-label="Language">
-      <button id="lang-en" type="button">EN</button>
+      <button id="lang-en" class="on" type="button">EN</button>
       <button id="lang-id" type="button">ID</button>
     </div>
+    <div class="view-toggle" role="group" aria-label="View">
+      <button id="view-check" class="on" type="button" data-i18n="checklist">Checklist</button>
+      <button id="view-chart" type="button" data-i18n="chart">Chart</button>
+    </div>
   </div>
-  <p class="subtitle" data-i18n="subtitle">Developmental screening for ages 0–6 years</p>
-</header>
 
-<main>
-  <!-- Child form -->
-  <section class="card" id="child-card">
-    <h2 data-i18n="childData">Child data</h2>
-    <label>
-      <span data-i18n="name">Name (optional)</span>
-      <input id="child-name" type="text" autocomplete="off" placeholder="—">
-    </label>
-    <div class="grid-2">
-      <label>
-        <span data-i18n="dob">Date of birth</span>
-        <input id="child-dob" type="date">
-      </label>
-      <label>
-        <span data-i18n="testDate">Test date</span>
-        <input id="test-date" type="date">
-      </label>
+  <h1 data-i18n="title">Denver II Developmental Screening</h1>
+  <p class="lede" data-i18n="lede">Screen a child aged 0–6 years across four areas — Personal-Social, Fine Motor-Adaptive, Language, and Gross Motor. Enter the birth date, mark what the child can do, and get a Normal / Suspect / Untestable result.</p>
+
+  <div class="notice" data-i18n="notice">Screening only — this is not a diagnosis. The milestone ages here are a simplified approximation of the Denver II form; if a result worries you, discuss it with a pediatrician.</div>
+
+  <section class="card" aria-labelledby="child-h">
+    <h2 id="child-h" data-i18n="childTitle">Child &amp; test date</h2>
+    <p class="sub" data-i18n="childSub">Works for any child. Nothing is tied to one profile.</p>
+    <div class="grid">
+      <div class="field">
+        <label for="f-name" data-i18n="name">Child's name (optional)</label>
+        <input id="f-name" type="text" autocomplete="off" placeholder="—">
+      </div>
+      <div class="field">
+        <label for="f-sex" data-i18n="sex">Sex (optional)</label>
+        <select id="f-sex"><option value="">—</option><option value="f" data-i18n="girl">Girl</option><option value="m" data-i18n="boy">Boy</option></select>
+      </div>
+      <div class="field">
+        <label for="f-dob" data-i18n="dob">Date of birth</label>
+        <input id="f-dob" type="date">
+      </div>
+      <div class="field">
+        <label for="f-test" data-i18n="testDate">Test date</label>
+        <input id="f-test" type="date" value="2026-11-09">
+      </div>
+      <div class="field">
+        <label for="f-prem" data-i18n="prem">Born premature — weeks early (0 if full term)</label>
+        <input id="f-prem" type="number" min="0" max="20" step="1" value="0">
+      </div>
     </div>
-    <div class="grid-2">
-      <label>
-        <span data-i18n="sex">Sex (optional)</span>
-        <select id="child-sex">
-          <option value="">—</option>
-          <option value="M" data-i18n="boy">Boy</option>
-          <option value="F" data-i18n="girl">Girl</option>
-        </select>
-      </label>
-      <label>
-        <span data-i18n="premature">Born prematurely — weeks early</span>
-        <input id="weeks-early" type="number" min="0" max="20" step="1" value="0">
-      </label>
+    <div class="age-strip" id="age-strip" style="display:none">
+      <div class="age-box"><div class="v" id="age-chrono">—</div><div class="k" data-i18n="chrono">Chronological age</div></div>
+      <div class="age-box corrected"><div class="v" id="age-corr">—</div><div class="k" data-i18n="corrected">Age used (corrected)</div></div>
+      <div class="age-box"><div class="v" id="age-days">—</div><div class="k" data-i18n="ageDays">Age in days</div></div>
     </div>
-    <div id="age-result" class="age-result" hidden></div>
-    <button id="start-btn" class="primary" type="button" data-i18n="start">Start screening</button>
   </section>
 
-  <!-- View toggle -->
-  <nav class="view-toggle" id="view-toggle" hidden>
-    <button id="view-checklist" type="button" class="active" data-i18n="checklistView">Checklist</button>
-    <button id="view-chart" type="button" data-i18n="chartView">Chart view</button>
-    <button id="view-history" type="button" data-i18n="history">History</button>
-  </nav>
-
-  <!-- Checklist -->
-  <section id="panel-checklist" hidden>
-    <div id="result-banner" class="result-banner" hidden></div>
-    <div id="checklist"></div>
-    <button id="save-btn" class="primary" type="button" data-i18n="save">Save screening</button>
-    <p class="hint" data-i18n="saveHint">Saved only in this browser (localStorage). No data leaves your device.</p>
+  <section class="card score-card" id="score-card" aria-live="polite">
+    <h2 data-i18n="resultTitle">Result</h2>
+    <div><span class="score-badge pending" id="score-badge">—</span></div>
+    <p class="sub" id="score-desc" style="margin-bottom:0"></p>
+    <div class="score-stats">
+      <span class="chip"><span data-i18n="delays">Delays</span>: <b id="st-delay">0</b></span>
+      <span class="chip"><span data-i18n="cautions">Cautions</span>: <b id="st-caution">0</b></span>
+      <span class="chip"><span data-i18n="scored">Items scored</span>: <b id="st-scored">0</b></span>
+    </div>
+    <div class="progress-line"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:14px">
+      <button class="btn" id="btn-save" type="button" data-i18n="saveBtn">Save to this session's history</button>
+      <button class="btn ghost" id="btn-reset" type="button" data-i18n="resetBtn">Clear answers</button>
+    </div>
   </section>
 
-  <!-- Chart -->
-  <section id="panel-chart" hidden>
-    <p class="hint" data-i18n="chartHint">Each bar = age when 25%–90% of children pass the item. The darker end is 75%–90%. The red line is the child's age.</p>
-    <div id="chart"></div>
-  </section>
+  <main id="main-area">
+    <div class="empty" id="empty-state" data-i18n="emptyState">Enter the child's date of birth above to see the milestones for their age.</div>
+    <div id="checklist-view"></div>
+    <div id="chart-view" style="display:none"></div>
+  </main>
 
-  <!-- History -->
-  <section id="panel-history" hidden>
+  <section class="card" id="history-card" style="display:none">
+    <h2 data-i18n="historyTitle">History — this session</h2>
+    <p class="sub" data-i18n="historySub">Saved screenings stay here while this page is open, so you can compare repeat checks.</p>
     <div id="history-list"></div>
   </section>
 
-  <section class="card disclaimer">
-    <h2 data-i18n="disclaimerTitle">Important</h2>
-    <p data-i18n="disclaimer">This is a screening aid, not a diagnosis. The milestone ages are a simplified approximation of the published Denver II norms and the dataset is editable in js/data.js. If a result is Suspect or you are worried about a child's development, discuss it with a paediatrician or child-development professional.</p>
-  </section>
-</main>
-
-<footer>
-  <small>Denver II Screening • <span data-i18n="footerNote">For screening &amp; education — not a diagnostic tool</span></small>
-</footer>
+  <footer data-i18n="footer">How scoring works: a Delay is a failed item that 90% of children pass at a younger age (bar fully left of the age line). A Caution is a failed item whose 75–90% range crosses the age line. Suspect = 1 or more Delays, or 2 or more Cautions. Untestable = refusals land where a Delay or Cautions would have been scored. Based on the Denver Developmental Screening Test II (Frankenburg et al.).</footer>
+</div>
 
 <script src="js/data.js"></script>
 <script src="js/i18n.js"></script>

@@ -9,7 +9,8 @@ A mobile-friendly web app for Denver II developmental screening of children
 - Gross Motor
 
 General-purpose: usable for any child, no account, no backend, no build step.
-Pure HTML/CSS/JavaScript — deploy it anywhere static files can be hosted.
+Pure HTML/CSS/JavaScript in a multi-file structure — deploy it anywhere
+static files can be hosted.
 
 ## Features
 
@@ -17,9 +18,10 @@ Pure HTML/CSS/JavaScript — deploy it anywhere static files can be hosted.
   - *Expected by now* — a Fail is a **Delay**
   - *Due around now* — a Fail in the 75–90% zone is a **Caution**
   - *Coming up next* — preview only, not scored
-- **Chart view** — the classic Denver II layout: one bar per item spanning the
-  age when 25%–90% of children pass it (darker tail = 75%–90%), with a red
-  age line for the child.
+- **Chart view** — one bar per item spanning the age when 25%–90% of children
+  pass it (darker tail = 75%–90%), with a red age line for the child.
+  The chart is windowed around the child's age so it never scrolls
+  sideways on a phone.
 - **Scoring** — Pass / Fail / Refusal / No Opportunity per item, with a
   simplified Denver II interpretation:
   - **Normal:** no Delays, at most 1 Caution
@@ -28,8 +30,9 @@ Pure HTML/CSS/JavaScript — deploy it anywhere static files can be hosted.
 - **Corrected age** — if a child was born prematurely (weeks early) and is
   under 24 months, the age line uses corrected age.
 - **Bilingual** — English / Bahasa Indonesia toggle (UI + item names).
-- **History** — save screenings in the browser (`localStorage`) and reload
-  them later. Nothing is sent to a server. No PDF/export by design (v1).
+- **History** — screenings saved during a visit are kept in page memory for
+  comparing repeat screenings in the same session (they clear on reload).
+  Nothing is sent to a server. No PDF/export by design (v1).
 
 ## Run it locally
 
@@ -67,28 +70,25 @@ git remote add origin https://github.com/<your-username>/denver-ii.git
 git push -u origin main
 ```
 
-> The commits in this repo were authored locally as `Muse <muse@localhost>`.
-> To use your own identity: `git config --global user.name "Your Name"` and
-> `git config --global user.email "you@example.com"` before your next commits.
-
 ## Project structure
 
 ```
 .
-├── index.html      # App shell / UI
+├── index.html      # App shell / UI (loads the files below)
 ├── css/styles.css  # Mobile-first styles
 └── js/
-    ├── data.js     # Milestone dataset: 105 items, ages in months [p25,p50,p75,p90]
+    ├── data.js     # Milestone dataset: 108 items, ages in months [p25,p50,p75,p90]
     ├── i18n.js     # UI strings EN / ID
     └── app.js      # Age calc, checklist, scoring, chart, history
 ```
 
 ## About the data — please read
 
-The ages in `js/data.js` are a **simplified approximation** of the published
-Denver II norms, included so the app works out of the box and so the dataset
-stays readable and editable. Denver II has 125 items; this v1 ships 105
-representative items across all ages and sectors.
+The milestone ages in `js/data.js` (the `RAW` dataset) are a **simplified
+approximation** of the published Denver II norms, included so the app works
+out of the box and so the dataset stays readable and editable. Denver II has
+125 items; this version ships 108 representative items across all ages and
+sectors (Personal–Social 24, Fine Motor–Adaptive 27, Language 30, Gross Motor 27).
 
 **This app is a screening aid for education and screening support — it is
 not a diagnosis and does not replace the official Denver II test form or a
