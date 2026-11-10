@@ -1,4 +1,4 @@
-// Denver II — app logic (Space version): age calc, checklist, scoring, chart, history
+// TumbuhKembang — app logic: age calc, checklist, scoring, chart, history
 var lang="en", view="check", answers={}, savedList=[], chartWin=null;
 
 function t(k){return STR[lang][k];}
@@ -163,7 +163,7 @@ function renderChart(age,info){
   var wins=[[0,24],[6,42],[24,66],[42,72],[0,72]];
   var lo=chartWin[0],hi=chartWin[1],span=hi-lo;
   function pct(m){return Math.max(0,Math.min(100,(m-lo)/span*100));}
-  var html='<div class="card"><h2>'+t("chart")+' — Denver II</h2><p class="sub">'+t("chartNote")+'</p>'
+  var html='<div class="card"><h2>'+t("chart")+' — TumbuhKembang</h2><p class="sub">'+t("chartNote")+'</p>'
     +'<div class="chart-window">'+wins.map(function(w,i){return '<button type="button" data-w="'+w[0]+','+w[1]+'" class="'+(w[0]===lo&&w[1]===hi?"on":"")+'">'+w[0]+'–'+w[1]+' '+t("months")+'</button>';}).join("")+'</div>'
     +'<div class="chart-legend"><span><span class="sw" style="background:var(--teal);opacity:.55"></span>'+t("p25lab")+'</span><span><span class="sw" style="background:var(--teal)"></span>'+t("p90lab")+'</span><span><span class="sw" style="background:var(--red-line);width:4px"></span>'+t("ageLine")+': '+fmtAge(age)+'</span></div>';
   ["PS","FM","LANG","GM"].forEach(function(sec){

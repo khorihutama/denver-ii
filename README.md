@@ -1,7 +1,8 @@
-# Denver II — Child Development Screening
+# TumbuhKembang — Child Development Screening (Unofficial)
 
-A mobile-friendly web app for Denver II developmental screening of children
-**0–6 years (0–72 months)**, across the 4 Denver II sectors:
+A mobile-friendly, **unofficial** web app for child developmental screening,
+based on Denver II–style milestones, for children
+**0–6 years (0–72 months)**, across the 4 sectors used by the Denver II:
 
 - Personal–Social
 - Fine Motor–Adaptive
@@ -23,7 +24,7 @@ static files can be hosted.
   The chart is windowed around the child's age so it never scrolls
   sideways on a phone.
 - **Scoring** — Pass / Fail / Refusal / No Opportunity per item, with a
-  simplified Denver II interpretation:
+  simplified interpretation based on the Denver II method:
   - **Normal:** no Delays, at most 1 Caution
   - **Suspect:** ≥1 Delay and/or ≥2 Cautions
   - **Untestable:** Refusal on an expected/due item — retest in 1–2 weeks
@@ -63,10 +64,10 @@ point the host at the repo root, no build command, publish directory `.`.
 
 ```bash
 # Option A — GitHub CLI
-gh repo create denver-ii --public --source=. --remote=origin --push
+gh repo create tumbuh-kembang --public --source=. --remote=origin --push
 
 # Option B — manual: create an empty repo on github.com first, then
-git remote add origin https://github.com/<your-username>/denver-ii.git
+git remote add origin https://github.com/<your-username>/tumbuh-kembang.git
 git push -u origin main
 ```
 
@@ -90,14 +91,24 @@ out of the box and so the dataset stays readable and editable. Denver II has
 125 items; this version ships 108 representative items across all ages and
 sectors (Personal–Social 24, Fine Motor–Adaptive 27, Language 30, Gross Motor 27).
 
-**This app is a screening aid for education and screening support — it is
-not a diagnosis and does not replace the official Denver II test form or a
-professional assessment.** Verify the dataset against the official form
-before any clinical use, and discuss a *Suspect* result with a paediatrician
-or child-development professional.
+**This app is a screening aid for education and screening support only — it
+is not the official Denver II test, it is not a diagnosis, and it does not
+replace the official test form (administered and interpreted by trained
+professionals) or a professional assessment. Do not use it for clinical
+decisions.** Discuss a *Suspect* result with a paediatrician or
+child-development professional.
 
-## License
+## License & legal status
 
-MIT — see `LICENSE` if present, or treat the code as MIT-licensed.
-The Denver II name and test are trademarks/properties of their respective owners;
-this is an independent, unofficial implementation aid.
+- **Code** — the HTML/CSS/JavaScript written for this project is MIT-licensed;
+  see `LICENSE`. The MIT license covers the code only.
+- **Dataset** — the milestone dataset in `js/data.js` is **not** official
+  Denver II test content and is **not** covered by the MIT license as an
+  original work of the test authors: it is a simplified approximation based
+  on Denver II milestones, provided for education and screening support only.
+- **Affiliation** — this is an independent, unofficial project. It is not
+  affiliated with, endorsed by, or sponsored by Denver Developmental
+  Materials, Inc. or the authors of the Denver Developmental Screening
+  Test II (Frankenburg et al.). The name "Denver II" is used descriptively
+  only, to identify the method this aid is based on; the test, its forms and
+  manuals remain the property of their respective owners.
